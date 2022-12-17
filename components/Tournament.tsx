@@ -8,6 +8,10 @@ export type TournamentProps = {
   id: number;
   name: string;
   description: string;
+  players: {
+    id: number;
+    name: string;
+  }[];
   owners: {
     id: number;
     name: string;

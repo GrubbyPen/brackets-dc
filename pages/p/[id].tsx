@@ -7,13 +7,17 @@ import { TournamentProps } from '../../components/Tournament';
 import prisma from '../../lib/prisma';
 import { useSession } from 'next-auth/react';
 import Owners from '../../components/Owners';
+import Players from '../../components/Tournament/Players';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const tournament = await prisma.tournament.findUnique({
     where: {
       id: Number(params?.id) || -1,
     },
-    include: { players: true, owners: { select: { id: true, name: true, email: true } } },
+    include: {
+      players: { select: { id: true, name: true } },
+      owners: { select: { id: true, name: true, email: true } },
+    },
   });
 
   return {
@@ -47,7 +51,10 @@ const Tournament: React.FC<TournamentProps> = props => {
   // if (!props.published) {
   //   title = `${title} (Draft)`;
   // }
-
+  const playerProps = {
+    players: props.players,
+    tournamentId: props.id,
+  };
   return (
     <Layout>
       <div>
@@ -62,7 +69,7 @@ const Tournament: React.FC<TournamentProps> = props => {
         {/* {userHasValidSession && tournamentBelongsToUser && (
           <button onClick={() => deleteTournament(props.id)}>Delete</button>
         )} */}
-        {/* <Players></Players> */}
+        <Players {...playerProps} />
         {/* <Teams></Teams> */}
       </div>
       <style jsx>{`
