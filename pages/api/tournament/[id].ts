@@ -5,7 +5,6 @@ import prisma from '../../../lib/prisma';
 // DELETE /api/post/:id
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 	const tournamentId = req.query.id;
-	console.log('post id', tournamentId);
 	const session = await getSession({ req });
 
 	if (req.method === 'DELETE') {

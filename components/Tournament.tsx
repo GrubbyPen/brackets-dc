@@ -20,6 +20,10 @@ export type TournamentProps = {
     name: string;
     email: string;
   }[];
+  teams: {
+    id: number;
+    name: string;
+  }[];
 };
 
 const Tournament: React.FC<{ tournament: TournamentProps }> = ({ tournament }) => (

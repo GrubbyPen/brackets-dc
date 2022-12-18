@@ -18,6 +18,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     include: {
       players: { select: { id: true, name: true } },
       owners: { select: { id: true, name: true, email: true } },
+      teams: { select: { id: true, name: true } },
     },
   });
   // console.log(JSON.parse(JSON.stringify(tournament)));
@@ -42,7 +43,6 @@ async function deleteTournament(id: number): Promise<void> {
 
 const Tournament: React.FC<TournamentProps> = props => {
   const { data: session, status } = useSession();
-  // console.log(props);
   if (status === 'loading') {
     return <div>Authenticating ...</div>;
   }
@@ -55,6 +55,8 @@ const Tournament: React.FC<TournamentProps> = props => {
   const playerProps = {
     players: props.players,
     tournamentId: props.id,
+    teamSize: props.teamSize,
+    teams: props.teams,
   };
 
   return (

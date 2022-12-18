@@ -78,21 +78,23 @@ model Player {
   name         String
   teams        TeamPlayers[]
   tournament   Tournament    @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
-  tournamentId Int
+  tournamentId Int           @map("tournament_id")
 }
 
 model Team {
-  id      Int           @id @default(autoincrement())
-  name    String
-  players TeamPlayers[]
+  id           Int           @id @default(autoincrement())
+  name         String
+  players      TeamPlayers[]
+  tournament   Tournament    @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  tournamentId Int           @map("tournament_id")
 }
 
 model TeamPlayers {
-  player     Player   @relation(fields: [playerId], references: [id])
-  playerId   Int // relation scalar field (used in the `@relation` attribute above)
-  team       Team     @relation(fields: [teamId], references: [id])
-  teamId     Int // relation scalar field (used in the `@relation` attribute above)
-  assignedAt DateTime @default(now())
+  team       Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId     Int      @map("team_id") // relation scalar field (used in the `@relation` attribute above)
+  player     Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  playerId   Int      @map("player_id") // relation scalar field (used in the `@relation` attribute above) 
+  assignedAt DateTime @default(now()) @map("assigned_at")
   assignedBy String
 
   @@id([playerId, teamId])
@@ -106,4 +108,5 @@ model Tournament {
   players     Player[]
   owners      User[]
   teamSize    Int      @default(1) @map(name: "team_size")
+  teams       Team[]
 }
