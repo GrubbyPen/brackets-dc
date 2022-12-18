@@ -59,7 +59,7 @@ model User {
   posts            Post[]
   accounts         Account[]
   sessions         Session[]
-  ownedTournaments Tournament[] 
+  ownedTournaments Tournament[]
 
   @@map(name: "users")
 }
@@ -105,4 +105,5 @@ model Tournament {
   createdAt   DateTime @default(now()) @map(name: "created_at")
   players     Player[]
   owners      User[]
+  teamSize    Int      @default(1) @map(name: "team_size")
 }

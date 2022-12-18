@@ -8,6 +8,7 @@ import prisma from '../../lib/prisma';
 import { useSession } from 'next-auth/react';
 import Owners from '../../components/Owners';
 import Players from '../../components/Tournament/Players';
+import Title from '../../components/Tournament/Title';
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const tournament = await prisma.tournament.findUnique({
@@ -19,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       owners: { select: { id: true, name: true, email: true } },
     },
   });
-  console.log(JSON.parse(JSON.stringify(tournament)));
+  // console.log(JSON.parse(JSON.stringify(tournament)));
   return {
     props: JSON.parse(JSON.stringify(tournament)),
   };
@@ -55,10 +56,14 @@ const Tournament: React.FC<TournamentProps> = props => {
     players: props.players,
     tournamentId: props.id,
   };
+
   return (
     <Layout>
       <div>
-        <h2>{props.name}</h2>
+        <h1>
+          <Title name={props.name} teamSize={props.teamSize} />
+        </h1>
+        {/* <h2>{props.name}</h2> */}
         <p>
           By <Owners owners={props.owners} />
         </p>
@@ -70,7 +75,6 @@ const Tournament: React.FC<TournamentProps> = props => {
           <button onClick={() => deleteTournament(props.id)}>Delete</button>
         )}
         <Players {...playerProps} />
-        {/* <Teams></Teams> */}
       </div>
       <style jsx>{`
         .page {

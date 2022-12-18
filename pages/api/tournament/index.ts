@@ -6,7 +6,7 @@ import { getSession } from 'next-auth/react';
 // Required fields in body: title
 // Optional fields in body: content
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-	const { name, description } = req.body;
+	const { name, description, teamSize } = req.body;
 
 	const session = await getSession({ req });
 	if (session) {
@@ -14,6 +14,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			data: {
 				name,
 				description,
+				teamSize,
 				owners: {
 					connect: {
 						email: session?.user?.email!,

@@ -3,7 +3,9 @@ import Layout from '../components/Layout';
 import Router from 'next/router';
 
 const Draft: React.FC = () => {
+  const doubles = 2;
   const [name, setTitle] = useState('');
+  const [teamSize, setTeamSize] = useState(doubles);
   const [description, setContent] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -12,7 +14,7 @@ const Draft: React.FC = () => {
     setSubmitting(true);
 
     try {
-      const body = { name, description };
+      const body = { name, description, teamSize };
       await fetch(`/api/tournament`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -38,6 +40,12 @@ const Draft: React.FC = () => {
             placeholder="Description (can use markdown!)"
             rows={8}
             value={description}
+          />
+          <input
+            onChange={e => setTeamSize(Number(e.target.value))}
+            placeholder="TeamSize"
+            type="number"
+            value={teamSize}
           />
           <input disabled={!description || !name || submitting} type="submit" value="Create" />
           <a className="back" href="#" onClick={() => Router.push('/')}>
