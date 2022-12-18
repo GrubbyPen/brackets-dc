@@ -94,8 +94,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 					where: { tournamentId: Number(tournamentId) },
 					select: { id: true, name: true },
 				});
-				res.json(result);
-				res.status(200).send({ message: `${numberOfTeams} Team(s) Created` });
+				res.status(200).send({ message: `${numberOfTeams} Team(s) Created`, data: result });
 			} else {
 				res.status(401).send({ message: 'Unauthorized' });
 			}
