@@ -20,11 +20,21 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			const { tournamentId, name } = req.body;
 
 			const session = await getSession({ req });
+
 			if (session) {
 				const result = await prisma.player.create({
 					data: {
-						tournamentId,
+						tournament: {
+							connect: {
+								id: Number(tournamentId),
+							},
+						},
 						name,
+						createdBy: {
+							connect: {
+								email: session?.user?.email!,
+							},
+						},
 					},
 				});
 				res.json(result);

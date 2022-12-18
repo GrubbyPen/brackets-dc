@@ -67,8 +67,8 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 				for (let i = 0; i < numberOfTeams; i++) {
 					const tp = shuffled.splice(0, tournament.teamSize);
 					const teamName = tp.map(player => player.name).join(' & ');
-					console.log(teamName);
-					const team = await prisma.team.create({
+
+					await prisma.team.create({
 						data: {
 							// teamId: ulid(),
 							tournament: { connect: { id: tournamentId } },
@@ -80,7 +80,11 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 											id: p.id,
 										},
 									},
-									assignedBy: session?.user?.email!,
+									assignedBy: {
+										connect: {
+											email: session?.user?.email!,
+										},
+									},
 								})),
 							},
 						},

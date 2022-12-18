@@ -7,6 +7,7 @@ interface Props {
   players: { id: number; name: string }[];
   teams: { id: number; name: string }[];
   teamSize: number;
+  userHasValidSession: boolean;
 }
 
 interface Player {
@@ -14,10 +15,11 @@ interface Player {
   name: string;
 }
 
-const Players: React.FC<Props> = ({ tournamentId, players, teams, teamSize }) => {
+const Players: React.FC<Props> = ({ tournamentId, players, teams, teamSize, userHasValidSession }) => {
   const [name, setName] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [updatedPlayers, setUpdatedPlayers] = useState(players);
+
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -44,7 +46,7 @@ const Players: React.FC<Props> = ({ tournamentId, players, teams, teamSize }) =>
       <form onSubmit={handleSubmit}>
         <input autoFocus onChange={e => setName(e.target.value)} placeholder="Name" type="text" value={name} />
         <div></div>
-        <input disabled={!name || submitting} type="submit" value="Create" />
+        <input disabled={!name || submitting || !userHasValidSession} type="submit" value="Create" />
 
         <a className="back" href="#" onClick={() => setName('')}>
           or Cancel

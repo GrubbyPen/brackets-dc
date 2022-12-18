@@ -57,6 +57,7 @@ const Tournament: React.FC<TournamentProps> = props => {
     tournamentId: props.id,
     teamSize: props.teamSize,
     teams: props.teams,
+    userHasValidSession,
   };
 
   return (

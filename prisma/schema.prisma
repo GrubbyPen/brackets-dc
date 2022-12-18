@@ -40,16 +40,18 @@ model Session {
 }
 
 model User {
-  id               Int          @id @default(autoincrement())
+  id               Int           @id @default(autoincrement())
   name             String?
-  email            String?      @unique
-  emailVerified    DateTime?    @map("email_verified")
+  email            String?       @unique
+  emailVerified    DateTime?     @map("email_verified")
   image            String?
-  createdAt        DateTime     @default(now()) @map(name: "created_at")
-  updatedAt        DateTime     @updatedAt @map(name: "updated_at")
+  createdAt        DateTime      @default(now()) @map(name: "created_at")
+  updatedAt        DateTime      @updatedAt @map(name: "updated_at")
   accounts         Account[]
   sessions         Session[]
   ownedTournaments Tournament[]
+  playersCreated   Player[]
+  TeamPlayers      TeamPlayers[]
 
   @@map(name: "users")
 }
@@ -64,11 +66,14 @@ model VerificationToken {
 }
 
 model Player {
-  id           Int           @id @default(autoincrement())
-  name         String
-  teams        TeamPlayers[]
-  tournament   Tournament    @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
-  tournamentId Int           @map("tournament_id")
+  id              Int           @id @default(autoincrement())
+  name            String
+  teams           TeamPlayers[]
+  tournament      Tournament    @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  tournamentId    Int           @map("tournament_id")
+  createdAt       DateTime      @default(now()) @map(name: "created_at")
+  createdBy       User          @relation(fields: [createdByUserId], references: [id], onDelete: Cascade)
+  createdByUserId Int           @map(name: "created_by_user_id")
 }
 
 model Team {
@@ -80,12 +85,13 @@ model Team {
 }
 
 model TeamPlayers {
-  team       Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  teamId     Int      @map("team_id") // relation scalar field (used in the `@relation` attribute above)
-  player     Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
-  playerId   Int      @map("player_id") // relation scalar field (used in the `@relation` attribute above) 
-  assignedAt DateTime @default(now()) @map("assigned_at")
-  assignedBy String
+  team             Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId           Int      @map("team_id") // relation scalar field (used in the `@relation` attribute above)
+  player           Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  playerId         Int      @map("player_id") // relation scalar field (used in the `@relation` attribute above) 
+  assignedAt       DateTime @default(now()) @map("assigned_at")
+  assignedBy       User     @relation(fields: [assignedByUserId], references: [id], onDelete: Cascade)
+  assignedByUserId Int      @map("assigned_by_user_id")
 
   @@id([playerId, teamId])
 }
