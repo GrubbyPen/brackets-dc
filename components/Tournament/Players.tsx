@@ -43,15 +43,17 @@ const Players: React.FC<Props> = ({ tournamentId, players, teams, teamSize, user
   return (
     <div>
       <h3>Players</h3>
-      <form onSubmit={handleSubmit}>
-        <input autoFocus onChange={e => setName(e.target.value)} placeholder="Name" type="text" value={name} />
-        <div></div>
-        <input disabled={!name || submitting || !userHasValidSession} type="submit" value="Create" />
+      {userHasValidSession && (
+        <form onSubmit={handleSubmit}>
+          <input autoFocus onChange={e => setName(e.target.value)} placeholder="Name" type="text" value={name} />
+          <div></div>
+          <input disabled={!name || submitting || !userHasValidSession} type="submit" value="Create" />
 
-        <a className="back" href="#" onClick={() => setName('')}>
-          or Cancel
-        </a>
-      </form>
+          <a className="back" href="#" onClick={() => setName('')}>
+            or Cancel
+          </a>
+        </form>
+      )}
       <style jsx>{`
         input[type='text'],
         textarea {
@@ -72,6 +74,7 @@ const Players: React.FC<Props> = ({ tournamentId, players, teams, teamSize, user
           margin-left: 1rem;
         }
       `}</style>
+
       {updatedPlayers && updatedPlayers.length > 0 ? (
         <>
           <ol>
@@ -85,7 +88,13 @@ const Players: React.FC<Props> = ({ tournamentId, players, teams, teamSize, user
               </li>
             ))}
           </ol>
-          <Teams tournamentId={tournamentId} teamSize={teamSize} teams={teams} playersCount={updatedPlayers.length} />
+          <Teams
+            tournamentId={tournamentId}
+            teamSize={teamSize}
+            teams={teams}
+            playersCount={updatedPlayers.length}
+            userHasValidSession={userHasValidSession}
+          />
         </>
       ) : (
         <Empty>&#10024; Post the first player &#10024;</Empty>

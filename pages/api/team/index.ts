@@ -90,6 +90,11 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 						},
 					});
 				}
+				const result = await prisma.team.findMany({
+					where: { tournamentId: Number(tournamentId) },
+					select: { id: true, name: true },
+				});
+				res.json(result);
 				res.status(200).send({ message: `${numberOfTeams} Team(s) Created` });
 			} else {
 				res.status(401).send({ message: 'Unauthorized' });

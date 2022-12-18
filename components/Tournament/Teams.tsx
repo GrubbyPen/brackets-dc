@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import Empty from '../Empty';
 
 interface Props {
   tournamentId: number;
   teams: { id: number; name: string }[];
   teamSize: number;
   playersCount: number;
+  userHasValidSession: boolean;
 }
 
 interface Team {
@@ -13,11 +13,11 @@ interface Team {
   name: string;
 }
 
-const Teams: React.FC<Props> = ({ tournamentId, teams, teamSize, playersCount }) => {
+const Teams: React.FC<Props> = ({ tournamentId, teams, teamSize, playersCount, userHasValidSession }) => {
   const [updatedTeams, setUpdatedTeams] = useState(teams);
   const [submitting, setSubmitting] = useState(false);
 
-  const showCreateTeams = playersCount >= teamSize * 2;
+  const showCreateTeams = userHasValidSession && playersCount >= teamSize * 2;
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -29,8 +29,8 @@ const Teams: React.FC<Props> = ({ tournamentId, teams, teamSize, playersCount })
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
-      // const data = (await res.json()) as Team[];
-      // setUpdatedTeams([...updatedTeams, data]);
+      const data = (await res.json()) as Team[];
+      setUpdatedTeams(data);
     } catch (error) {
       console.error(error);
     } finally {
@@ -41,7 +41,7 @@ const Teams: React.FC<Props> = ({ tournamentId, teams, teamSize, playersCount })
     <>
       {teamSize > 1 ? (
         <>
-          {showCreateTeams ? (
+          {showCreateTeams && (
             <>
               <form onSubmit={handleSubmit}>
                 <input disabled={submitting} type="submit" value="Create" />
@@ -67,34 +67,27 @@ const Teams: React.FC<Props> = ({ tournamentId, teams, teamSize, playersCount })
                 }
               `}</style>
             </>
-          ) : null}
-
-          {updatedTeams && updatedTeams.length > 1 ? (
+          )}
+          {updatedTeams.length > 1 ? (
             <div>
               <h3>Teams</h3>
-              <>
-                <ol>
-                  {updatedTeams.map(team => (
-                    <li key={team.id}>
-                      <div>
-                        <h2>
-                          {team.name}
-                          {/* <Link to={`/team/${team.id}`}>{team.name}</Link> */}
-                        </h2>
-                        &nbsp;
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-              </>
+              <ol>
+                {updatedTeams.map(team => (
+                  <li key={team.id}>
+                    <div>
+                      <h2>
+                        {team.name}
+                        {/* <Link to={`/team/${team.id}`}>{team.name}</Link> */}
+                      </h2>
+                      &nbsp;
+                    </div>
+                  </li>
+                ))}
+              </ol>
             </div>
-          ) : (
-            <></>
-          )}
+          ) : null}
         </>
-      ) : (
-        <></>
-      )}
+      ) : null}
     </>
   );
 };
