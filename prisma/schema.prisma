@@ -59,7 +59,7 @@ model User {
   posts            Post[]
   accounts         Account[]
   sessions         Session[]
-  ownedTournaments Tournament[]
+  ownedTournaments Tournament[] 
 
   @@map(name: "users")
 }
@@ -77,7 +77,7 @@ model Player {
   id           Int           @id @default(autoincrement())
   name         String
   teams        TeamPlayers[]
-  tournament   Tournament    @relation(fields: [tournamentId], references: [id])
+  tournament   Tournament    @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
   tournamentId Int
 }
 

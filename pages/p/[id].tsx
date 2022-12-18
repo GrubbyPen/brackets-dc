@@ -19,7 +19,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       owners: { select: { id: true, name: true, email: true } },
     },
   });
-
+  console.log(JSON.parse(JSON.stringify(tournament)));
   return {
     props: JSON.parse(JSON.stringify(tournament)),
   };
@@ -66,9 +66,9 @@ const Tournament: React.FC<TournamentProps> = props => {
         {/* {!props.published && userHasValidSession && tournamentBelongsToUser && (
           <button onClick={() => publishTournament(props.id)}>Publish</button>
         )} */}
-        {/* {userHasValidSession && tournamentBelongsToUser && (
+        {userHasValidSession && tournamentBelongsToUser && (
           <button onClick={() => deleteTournament(props.id)}>Delete</button>
-        )} */}
+        )}
         <Players {...playerProps} />
         {/* <Teams></Teams> */}
       </div>
