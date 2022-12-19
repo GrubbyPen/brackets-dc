@@ -29,7 +29,7 @@ const Teams: React.FC<Props> = ({ tournamentId, teams, teamSize, playersCount, u
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
-      const data = (await res.json()) as Team[];
+      const data = (await res.json()).data as Team[];
       setUpdatedTeams(data);
     } catch (error) {
       console.error(error);
